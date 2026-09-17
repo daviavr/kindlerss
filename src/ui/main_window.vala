@@ -29,6 +29,8 @@ namespace Kindlerss.Ui {
          * libgobject does not export (see meson.build). */
         public double scaling = 1.0;
 
+        public ArticleList article_list;
+
         public MainWindow () {
             title = "L:A_N:application_PC:N_ID:" + APP_ID;
             border_width = 0;
@@ -108,6 +110,12 @@ namespace Kindlerss.Ui {
             }
         }
 
+        /*
+         * The main screen is deliberately minimal: a header and a reserved
+         * space that is filled entirely by the ArticleList component. All
+         * content logic (fetching, paging, gestures) lives in that
+         * component; this window only wires the article source.
+         */
         private Widget build_content () {
             var box = new VBox (false, 0);
             box.border_width = (uint) sc (12);
@@ -119,26 +127,13 @@ namespace Kindlerss.Ui {
 
             box.pack_start (new HSeparator (), false, false, (uint) sc (4));
 
-            var list = new VBox (false, 0);
-            foreach (var article in Data.MockFeed.fetch_articles ()) {
-                var item = new FeedItem (article, scaling);
-                item.activated.connect ((a) => {
-                    debug ("article tapped: %s (%s)", a.title, a.url);
-                });
-                list.pack_start (item, false, false, 0);
-            }
-
-            var scrolled = new ScrolledWindow (null, null);
-            scrolled.set_policy (PolicyType.NEVER, PolicyType.AUTOMATIC);
-            scrolled.add_with_viewport (list);
-            box.pack_start (scrolled, true, true, 0);
-
-            box.pack_start (new HSeparator (), false, false, (uint) sc (4));
-
-            var buttons = new HBox (true, sc (8));
-            buttons.pack_start (new Button.with_label ("Refresh"));
-            buttons.pack_start (new Button.with_label ("Settings"));
-            box.pack_start (buttons, false, false, (uint) sc (4));
+            article_list = new ArticleList (scaling);
+            article_list.source = Data.MockFeed.fetch_articles;
+            article_list.article_activated.connect ((article) => {
+                debug ("article tapped: %s (%s)", article.title, article.url);
+            });
+            article_list.reload ();
+            box.pack_start (article_list, true, true, 0);
 
             return box;
         }

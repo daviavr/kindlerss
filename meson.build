@@ -35,6 +35,7 @@ sources = files(
     './src/store/article.vala',
     './src/data/mock_articles.vala',
     './src/ui/feed_item.vala',
+    './src/ui/article_list.vala',
     './src/ui/main_window.vala',
     './src/main.vala'
 )
