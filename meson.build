@@ -32,6 +32,9 @@ sources = files(
     './src/ffi/libcurl.vapi',
     './src/ffi/curl_shim.c',
     './src/net/fetcher.vala',
+    './src/store/article.vala',
+    './src/data/mock_articles.vala',
+    './src/ui/feed_item.vala',
     './src/ui/main_window.vala',
     './src/main.vala'
 )

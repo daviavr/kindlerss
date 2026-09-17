@@ -155,7 +155,7 @@ During development, we build on the host so we can test quickly without copying 
 | Library | Version in sysroot | Purpose |
 |---------|-------------------|---------|
 | `gtk+-2.0` | 2.24.33 | User interface. |
-| `glib-2.0` | 2.82.4 | GObject, main loop, data structures. |
+| `glib-2.0` | ~2.29 (`.pc` files falsely claim 2.82.4) | GObject, main loop, data structures. |
 | `gio-2.0` | (part of GLib) | File I/O, networking helpers. |
 | `sqlite3` | (available) | Local article cache. |
 | `libxml-2.0` | (available) | RSS/Atom fallback parsing. |

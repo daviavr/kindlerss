@@ -120,32 +120,13 @@ namespace Kindlerss.Ui {
             box.pack_start (new HSeparator (), false, false, (uint) sc (4));
 
             var list = new VBox (false, 0);
-            string[] titles = {
-                "Example headline: the quick brown fox jumps over the lazy dog",
-                "A longer article title that should wrap onto a second line on narrow screens",
-                "Kindle modding community releases new jailbreak",
-                "E-ink displays: why partial refresh matters",
-                "Cross-compiling GTK2 apps for ARM",
-                "Understanding the AwesomeWM title format",
-                "FreshRSS sync protocol explained",
-                "SQLite as an offline article cache",
-                "Vala for embedded Linux development",
-                "Designing touch UI for e-ink"
-            };
-            string[] subtitles = {
-                "Example Feed - 2h ago",
-                "Example Feed - 3h ago",
-                "KindleModding - 5h ago",
-                "E-Ink News - yesterday",
-                "Embedded Weekly - yesterday",
-                "KindleModding - yesterday",
-                "RSS Planet - 2 days ago",
-                "SQLite Blog - 2 days ago",
-                "Vala News - 3 days ago",
-                "E-Ink News - 3 days ago"
-            };
-            for (int i = 0; i < titles.length; i++)
-                list.pack_start (build_article_row (titles[i], subtitles[i]), false, false, 0);
+            foreach (var article in Data.MockFeed.fetch_articles ()) {
+                var item = new FeedItem (article, scaling);
+                item.activated.connect ((a) => {
+                    debug ("article tapped: %s (%s)", a.title, a.url);
+                });
+                list.pack_start (item, false, false, 0);
+            }
 
             var scrolled = new ScrolledWindow (null, null);
             scrolled.set_policy (PolicyType.NEVER, PolicyType.AUTOMATIC);
@@ -160,27 +141,6 @@ namespace Kindlerss.Ui {
             box.pack_start (buttons, false, false, (uint) sc (4));
 
             return box;
-        }
-
-        private Widget build_article_row (string title_text, string subtitle_text) {
-            var row = new VBox (false, sc (2));
-            row.border_width = (uint) sc (4);
-
-            var title_label = new Label (title_text);
-            title_label.name = "kindlerss-article-title";
-            title_label.xalign = 0f;
-            title_label.set_line_wrap (true);
-            row.pack_start (title_label, false, false, 0);
-
-            var subtitle = new Label (subtitle_text);
-            subtitle.name = "kindlerss-article-subtitle";
-            subtitle.xalign = 0f;
-            row.pack_start (subtitle, false, false, 0);
-
-            var wrapper = new VBox (false, 0);
-            wrapper.pack_start (row, false, false, 0);
-            wrapper.pack_start (new HSeparator (), false, false, 0);
-            return wrapper;
         }
     }
 }
